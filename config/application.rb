@@ -1,4 +1,5 @@
-require_relative 'boot'
+requissets.initialize_on_precompile = false
+re_relative 'boot'
 
 require 'rails/all'
 
