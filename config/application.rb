@@ -1,3 +1,5 @@
+# For Heroku
+config.assets.initialize_on_precompile = false
 require_relative 'boot'
 
 require 'rails/all'
@@ -14,6 +16,3 @@ module Taskapp
 
   end
 end
-
-# For Heroku
-config.assets.initialize_on_precompile = false
