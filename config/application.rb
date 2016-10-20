@@ -1,5 +1,5 @@
-requissets.initialize_on_precompile = false
-re_relative 'boot'
+config.assets.initialize_on_precompile = false
+require_relative 'boot'
 
 require 'rails/all'
 
