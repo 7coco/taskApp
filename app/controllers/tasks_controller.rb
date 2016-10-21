@@ -20,6 +20,6 @@ class TasksController < ApplicationController
 
   private
     def tasks_params
-      params[:task].permit(:title)
+      params[:task].permit(:title, :deadline)
     end
 end

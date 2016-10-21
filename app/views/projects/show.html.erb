@@ -4,12 +4,16 @@
     <li>
       <%= check_box_tag '', '', task.done, { 'data-id' => task.id, 'data-prpject-id' => task.project_id }%>
       <%= task.title %>
+      <% if task.deadline%>
+        <%= task.deadline.to_s(:datetime) %>
+      <% end %>
       <%= link_to "[Delete]", project_task_path(task.project_id, task.id), method: :delete, data: {confirm: "Are you sure?" } %>
     </li>
   <% end %>
   <li>
     <%= form_for [@project, @project.tasks.build] do |f| %>
       <%= f.text_field :title %>
+      <%= f.datetime_select :deadline %>
       <%= f.submit %>
     <% end %>
   </li>

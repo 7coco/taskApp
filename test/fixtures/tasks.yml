@@ -3,9 +3,11 @@
 one:
   title: MyString
   done: false
+  deadline: 2016-10-21 20:48:38
   project: one
 
 two:
   title: MyString
   done: false
+  deadline: 2016-10-21 20:48:38
   project: two
