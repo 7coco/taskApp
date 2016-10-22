@@ -21,3 +21,4 @@
 .byebug_history
 
 db/migrate/.DS_Store
+node_modules

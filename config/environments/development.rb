@@ -54,4 +54,16 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # By default only files in /app and /node_modules are browserified,
+  # vendor stuff is normally not made for browserification and may stop
+  # working.
+  # config.browserify_rails.paths << /vendor\/assets\/javascripts\/module\.js/
+
+  # Environments in which to generate source maps
+  #
+  # The default is none
+  config.browserify_rails.source_map_environments << "development"
+
+  config.browserify_rails.commandline_options = "--fast"
 end
