@@ -3,7 +3,11 @@
   <% @project.tasks.each do |task| %>
     <li>
       <%= check_box_tag '', '', task.done, { 'data-id' => task.id, 'data-project-id' => task.project_id, class: 'done_check' }%>
-      <%= task.title %>
+      <% if task.done == true %>
+        <s><%= task.title %></s>
+      <% else %>
+        <%= task.title %>
+      <% end%>
       <% if task.deadline%>
         <%= task.deadline.to_s(:datetime) %>
       <% end %>
@@ -23,9 +27,18 @@
 <script>
 $(function(){
   var datetimeForm = $('#datetime');
-  $('input[type=checkbox]').click(function(){
-    console.log($(this).data('project-id'));
-    $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
+  $('.done_check').click(function(){
+     $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
+  });
+  window.fetch('/project_data')
+  .then(function(response){
+    response.json()
+    .then(function(data){
+      console.log(data);
+    }).catch(function(err){
+      console.log(err);
+    });
   });
 });
+
 </script>

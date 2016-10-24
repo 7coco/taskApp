@@ -16,7 +16,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     p @task
     @task.done = !@task.done
-    p @task.done
+    p @task
     @task.save
   end
 

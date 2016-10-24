@@ -10,3 +10,16 @@
 </ul>
 
 <p><%= link_to "Add New", new_project_path %></p>
+<script>
+$(function(){
+  window.fetch('/project_data')
+  .then(function(response){
+    response.json()
+    .then(function(data){
+      console.log(data);
+    }).catch(function(err){
+      console.log(err);
+    });
+  });
+});
+</script>

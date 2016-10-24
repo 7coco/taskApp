@@ -38,6 +38,11 @@ class ProjectsController < ApplicationController
     redirect_to projects_path
   end
 
+  def project_data
+    @projects = Project.all
+    render json: @projects
+  end
+
   private
     def project_params
       params[:project].permit(:title)
