@@ -15,4 +15,4 @@
 //= require turbolinks
 //= require_tree .
 
-window.Vue = require('vue');
+window.Vue = require('vue/dist/vue.js');
