@@ -14,6 +14,7 @@
       <%= link_to "[Delete]", project_task_path(task.project_id, task.id), method: :delete, data: { confirm: "Are you sure?" } %>
     </li>
   <% end %>
+  </li>
   <div id="createTask">
     <%= form_for [@project, @project.tasks.build] do |f| %>
       <%= f.text_field :title %>
@@ -23,6 +24,11 @@
     <% end %>
   </div>
 </ul>
+<ul id="tasks">
+  <li v-for="task in tasks">
+    {{ task.title }}
+  </li>
+</ul>
 <%= javascript_include_tag 'show', 'data-turbolinks-track': 'reload' %>
 <script>
 $(function(){
@@ -30,11 +36,17 @@ $(function(){
   $('.done_check').click(function(){
      $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
   });
-  window.fetch('/project_data')
+  var project_id = window.location.pathname.split('/')[2]
+  window.fetch('/task_data/' + project_id)
   .then(function(response){
     response.json()
     .then(function(data){
-      console.log(data);
+      new Vue({
+        el: '#tasks',
+        data: {
+          tasks: data
+        }
+      })
     }).catch(function(err){
       console.log(err);
     });

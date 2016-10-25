@@ -20,6 +20,11 @@ class TasksController < ApplicationController
     @task.save
   end
 
+  def task_data
+    @project = Project.find(params[:project_id])
+    render json: @project.tasks
+  end
+
   private
     def tasks_params
       params[:task].permit(:title, :deadline)

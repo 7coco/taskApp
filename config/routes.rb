@@ -4,6 +4,7 @@ Taskapp::Application.routes.draw do
   end
 
   get '/project_data' => 'projects#project_data'
+  get '/task_data/:project_id' => 'tasks#task_data'
   post '/projects/:project_id/tasks/:id/toggle' => 'tasks#toggle'
   root 'projects#index'
 end
