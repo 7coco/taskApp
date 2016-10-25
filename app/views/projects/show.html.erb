@@ -18,7 +18,7 @@
   <div id="createTask">
     <%= form_for [@project, @project.tasks.build] do |f| %>
       <%= f.text_field :title %>
-      <div id="datetime"><%= f.datetime_select :deadline, start_year: 2016 %></div>
+      <div id="datetime"><%= f.datetime_local_field :deadline, start_year: 2016 %></div>
       締め切りを設定しない<%= check_box '', '', { id: 'no_deadline' } %>
       <%= f.submit %>
     <% end %>
@@ -33,9 +33,16 @@
       <input type="checkbox" lazy @click="toggle" :data-id="task.id">
     </span>
     {{ task.title }}
-    {{ task.deadline }}
+    {{ task.deadline ? task.deadline.replace(/-/g, '/').replace(/T/, ' ').slice(0,16) : ''}}
     <a @click="deleteTask" :data-id="task.id">[Delete]</a>
   </li>
+  <div id="createTask">
+    <input type="text" id="taskTitle">
+    <input type="datetime-local" id="deadline">
+    <input type="checkbox" id="no_deadline">
+    <label for="no_deadline">締め切りを設定しない</label>
+    <input type="button" value="Create Task" @click="submitCreateTask">
+  </div>
 </ul>
 <%= javascript_include_tag 'show', 'data-turbolinks-track': 'reload' %>
 <script>
@@ -44,7 +51,7 @@ $(function(){
   $('.done_check').click(function(){
      $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
   });
-  var project_id = window.location.pathname.split('/')[2]
+  var project_id = window.location.pathname.split('/')[2];
   window.fetch('/task_data/' + project_id)
   .then(function(response){
     response.json()
@@ -63,6 +70,9 @@ $(function(){
               type: 'DELETE',
               url: '/projects/' + project_id + '/tasks/' + event.target.dataset.id
             });
+          },
+          submitCreateTask: function(event){
+            $.post('/projects/' + project_id + '/tasks',{ title: $('#taskTitle').val(), deadline: $('#deadline').val(), });
           }
         }
       });
