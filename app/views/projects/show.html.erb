@@ -34,7 +34,7 @@
     </span>
     {{ task.title }}
     {{ task.deadline }}
-    {{ task.done }}
+    <a @click="deleteTask" :data-id="task.id">[Delete]</a>
   </li>
 </ul>
 <%= javascript_include_tag 'show', 'data-turbolinks-track': 'reload' %>
@@ -57,6 +57,12 @@ $(function(){
         methods: {
           toggle: function(event){
             $.post('/projects/' + project_id + '/tasks/' + event.target.dataset.id + '/toggle');
+          },
+          deleteTask: function(event){
+            $.ajax({
+              type: 'DELETE',
+              url: '/projects/' + project_id + '/tasks/' + event.target.dataset.id
+            });
           }
         }
       });
