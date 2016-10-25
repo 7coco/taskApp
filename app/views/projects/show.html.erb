@@ -26,10 +26,15 @@
 </ul>
 <ul id="tasks">
   <li v-for="task in tasks">
-    <input type="checkbox" lazy @click="toggle" :data-id="task.id">
+    <span v-if="task.done">
+      <input type="checkbox" lazy @click="toggle" :data-id="task.id" checked="checked">
+    </span>
+    <span v-else>
+      <input type="checkbox" lazy @click="toggle" :data-id="task.id">
+    </span>
     {{ task.title }}
     {{ task.deadline }}
-    {{ task.id }}
+    {{ task.done }}
   </li>
 </ul>
 <%= javascript_include_tag 'show', 'data-turbolinks-track': 'reload' %>
