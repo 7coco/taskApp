@@ -26,7 +26,10 @@
 </ul>
 <ul id="tasks">
   <li v-for="task in tasks">
+    <input type="checkbox" lazy @click="toggle" :data-id="task.id">
     {{ task.title }}
+    {{ task.deadline }}
+    {{ task.id }}
   </li>
 </ul>
 <%= javascript_include_tag 'show', 'data-turbolinks-track': 'reload' %>
@@ -44,9 +47,14 @@ $(function(){
       new Vue({
         el: '#tasks',
         data: {
-          tasks: data
+          tasks: data,
+        },
+        methods: {
+          toggle: function(event){
+            $.post('/projects/' + project_id + '/tasks/' + event.target.dataset.id + '/toggle');
+          }
         }
-      })
+      });
     }).catch(function(err){
       console.log(err);
     });
