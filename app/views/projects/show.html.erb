@@ -25,6 +25,14 @@
   </div>
 </ul>
 <ul id="tasks">
+  <select id="sort" v-on:change="sort">
+    <option value="updated_before">更新古い順</option>
+    <option value="updated_later">更新新しい順</option>
+    <option value="created_before">作成古い順</option>
+    <option value="created_later">作成新しい順</option>
+    <!--option value="near_deadline">締め切り迫ってる順</option-->
+    <option value="deadline">締め切り日付順</option>
+  </select>
   <li v-for="task in tasks">
     <span v-if="task.done">
       <input type="checkbox" lazy @click="toggle" :data-id="task.id" checked="checked">
@@ -34,6 +42,7 @@
     </span>
     {{ task.title }}
     {{ task.deadline ? task.deadline.replace(/-/g, '/').replace(/T/, ' ').slice(0,16) : ''}}
+    {{ task.updated_at }}
     <a @click="deleteTask" :data-id="task.id">[Delete]</a>
   </li>
   <div id="createTask">
@@ -73,6 +82,94 @@ $(function(){
           },
           submitCreateTask: function(event){
             $.post('/projects/' + project_id + '/tasks',{ title: $('#taskTitle').val(), deadline: $('#deadline').val(), });
+          },
+          sort: function(event){
+            if(event.target.value === 'updated_before'){
+              data.sort(function(taskA,taskB){
+                if(taskA.updated_at < taskB.updated_at) return -1;
+                if(taskA.updated_at > taskB.updated_at) return 1;
+                return 0;
+              });
+            }else if(event.target.value === 'updated_later'){
+              data.sort(function(taskA, taskB){
+                if(taskA.updated_at > taskB.updated_at) return -1;
+                if(taskA.updated_at < taskB.updated_at) return 1;
+                return 0;
+              });
+            }else if(event.target.value === 'created_before'){
+              data.sort(function(taskA, taskB){
+                if(taskA.created_at < taskB.created_at) return -1;
+                if(taskA.created_at > taskB.created_at) return 1;
+                return 0;
+              });
+            }else if(event.target.value === 'created_later'){
+              data.sort(function(taskA, taskB){
+                if(taskA.created_at > taskB.created_at) return -1;
+                if(taskA.created_at < taskB.created_at) return 1;
+                return 0;
+              });
+            }else if(event.target.value === 'near_deadline'){
+              var now = Date().split(' ');
+              console.dir(now);
+              var nowYear = parseInt(now[3], 10);
+              var nowMonth = now[1]
+              switch(nowMonth){
+                case 'Jun':
+                  nowMonth = 1;
+                  break;
+                case 'Feb':
+                  nowMonth = 2;
+                  break;
+                case 'Mar':
+                  nowMonth = 3;
+                  break;
+                case 'Apl':
+                  nowMonth = 4;
+                  break;
+                case 'May':
+                  nowMonth = 5;
+                  break;
+                case 'Jun':
+                  nowMonth = 6;
+                  break;
+                case 'Jul':
+                  nowMonth = 7;
+                  break;
+                case 'Aug':
+                  nowMonth = 8;
+                  break;
+                case 'Sep':
+                  nowMonth = 9;
+                  break;
+                case 'Oct':
+                  nowMonth = 10;
+                  break;
+                case 'Nov':
+                  nowMonth = 11;
+                  break;
+                case 'Dec':
+                  nowMonth = 12;
+                  break;
+              }
+              var nowDay = parseInt(now[2], 10);
+              var nowHour = now[4].slice(0, 2);
+              var nowMinute = now[4].slice(3, 5);
+              var nowSecond = now[4].slice(6, 8);
+              data.sort(function(taskA, taskB){
+                console.log(taskA.deadline);
+                if(taskA.deadline < now || taskA.deadline === null) return 2;
+                // if(taskA.deadline)
+                // if(taskA.deadline > now) return -1;
+                // if(taskA.dealine < now) return 1;
+                return 0;
+              });
+            }else if(event.target.value = 'deadline'){
+              data.sort(function(taskA,taskB){
+                if(taskA.deadline < taskB.deadline) return -1;
+                if(taskA.deadline > taskB.deadline) return 1;
+                return 0;
+              });
+            }
           }
         }
       });
