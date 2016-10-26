@@ -25,26 +25,36 @@
   </div>
 </ul>
 <ul id="tasks">
-  <select id="sort" v-on:change="sort">
-    <option value="updated_before">更新古い順</option>
-    <option value="updated_later">更新新しい順</option>
-    <option value="created_before">作成古い順</option>
-    <option value="created_later">作成新しい順</option>
-    <!--option value="near_deadline">締め切り迫ってる順</option-->
-    <option value="deadline">締め切り日付順</option>
-  </select>
-  <li v-for="task in tasks">
-    <span v-if="task.done">
-      <input type="checkbox" lazy @click="toggle" :data-id="task.id" checked="checked">
-    </span>
-    <span v-else>
-      <input type="checkbox" lazy @click="toggle" :data-id="task.id">
-    </span>
-    {{ task.title }}
-    {{ task.deadline ? task.deadline.replace(/-/g, '/').replace(/T/, ' ').slice(0,16) : ''}}
-    {{ task.updated_at }}
-    <a @click="deleteTask" :data-id="task.id">[Delete]</a>
-  </li>
+  <div class="row">
+    <select id="sort" v-on:change="sort" class="col-md-2 col-md-offset-10" style="margin-bottom:5px">
+      <option value="updated_before">更新古い順</option>
+      <option value="updated_later">更新新しい順</option>
+      <option value="created_before">作成古い順</option>
+      <option value="created_later">作成新しい順</option>
+      <!--option value="near_deadline">締め切り迫ってる順</option-->
+      <option value="deadline">締め切り日付順</option>
+    </select>
+  </div>
+  <table class="table-bordered row">
+    <thead><tr><th class="col-md-1">Done</th><th class="col-md-7">Task Title</th><th class="col-md-1">Due Date</th><th class="col-md-1">Created Date</th><th class="col-md-1">Updated Date</th><th class="col-md-1">Delete Task</th></tr></thead>
+      <tbody v-for="task in tasks">
+        <tr>
+          <td align="center">
+            <span v-if="task.done">
+              <input type="checkbox" lazy @click="toggle" :data-id="task.id" checked="checked">
+            </span>
+            <span v-else>
+              <input type="checkbox" lazy @click="toggle" :data-id="task.id">
+            </span>
+          </td>
+          <td class="">{{ task.title }}</td>
+          <td>{{ task.deadline ? task.deadline.replace(/-/g, '/').replace(/T/, ' ').slice(0, 16) : '' }}</td>
+          <td>{{ task.created_at.replace(/-/g, '/').replace(/T/, ' ').slice(0, 16) }}</td>
+          <td>{{ task.updated_at.replace(/-/g, '/').replace(/T/, ' ').slice(0, 16) }}</td>
+          <td><a @click="deleteTask" :data-id="task.id">[Delete]</a></td>
+        </tr>
+      </tbody>
+  </table>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTaskModal">Create Task</button>
   <div id="createTaskModal" class="modal fade" role="dialog" aria-labelledby="modalTitle">
     <div class="modal-dialog" role="document">
@@ -53,13 +63,13 @@
           <h4 class="modal-title" id="modalTitle"> Create a New Task</h4>
         </div>
         <div class="modal-body">
-          <div class="form-inline">
+          <div>
             <div class="form-group">
-              <label for="taskTitle" class="sr-only"></label>
-              <input type="text" id="taskTitle" placeholder="Task Title" class="form-control">
+              <label for="taskTitle">Task Title</label>
+              <input type="text" id="taskTitle" placeholder="ex.) Implement a task management tool by using Ruby on rails and MVVM." class="form-control">
             </div>
             <div class="form-group">
-              <label for="deadline">締め切り</label>
+              <label for="deadline">Due Date</label>
               <input type="datetime-local" id="deadline" step="300" value="2016-10-28T00:00" class="form-control">
             </div>
             <!-- input type="checkbox" id="no_deadline">
