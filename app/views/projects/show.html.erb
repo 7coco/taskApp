@@ -24,7 +24,7 @@
     <% end %>
   </div>
 </ul>
-<ul id="tasks">
+<ul id="tasks" style="padding:50px">
   <div class="row">
     <select id="sort" v-on:change="sort" class="col-md-2 col-md-offset-10" style="margin-bottom:5px">
       <option value="updated_before">更新古い順</option>
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
               <label for="deadline">Due Date</label>
-              <input type="datetime-local" id="deadline" step="300" value="2016-10-28T00:00" class="form-control">
+              <input type="datetime-local" id="deadline" step="300" :value="currentTime" class="form-control">
             </div>
             <!-- input type="checkbox" id="no_deadline">
             <label for="no_deadline">締め切りを設定しない</label -->
@@ -91,6 +91,53 @@ $(function(){
      $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
   });
   var project_id = window.location.pathname.split('/')[2];
+  var now = Date().split(' ');
+  console.dir(now);
+  var nowYear = parseInt(now[3], 10);
+  var nowMonth = now[1]
+  switch(nowMonth){
+    case 'Jun':
+      nowMonth = 01;
+      break;
+    case 'Feb':
+      nowMonth = 02;
+      break;
+    case 'Mar':
+      nowMonth = 03;
+      break;
+    case 'Apl':
+      nowMonth = 04;
+      break;
+    case 'May':
+      nowMonth = 05;
+      break;
+    case 'Jun':
+      nowMonth = 06;
+      break;
+    case 'Jul':
+      nowMonth = 07;
+      break;
+    case 'Aug':
+      nowMonth = 08;
+      break;
+    case 'Sep':
+      nowMonth = 09;
+      break;
+    case 'Oct':
+      nowMonth = 10;
+      break;
+    case 'Nov':
+      nowMonth = 11;
+      break;
+    case 'Dec':
+      nowMonth = 12;
+      break;
+  }
+  var nowDay = parseInt(now[2], 10);
+  var nowHour = now[4].slice(0, 2);
+  var nowMinute = now[4].slice(3, 5);
+  var currentTime = nowYear + '-' + nowMonth + '-' + nowDay + 'T' + nowHour + ':' + nowMinute;
+  console.log(currentTime);
   window.fetch('/task_data/' + project_id)
   .then(function(response){
     response.json()
@@ -99,6 +146,7 @@ $(function(){
         el: '#tasks',
         data: {
           tasks: data,
+          currentTime: currentTime,
         },
         methods: {
           toggle: function(event){
@@ -145,31 +193,31 @@ $(function(){
               var nowMonth = now[1]
               switch(nowMonth){
                 case 'Jun':
-                  nowMonth = 1;
+                  nowMonth = 01;
                   break;
                 case 'Feb':
-                  nowMonth = 2;
+                  nowMonth = 02;
                   break;
                 case 'Mar':
-                  nowMonth = 3;
+                  nowMonth = 03;
                   break;
                 case 'Apl':
-                  nowMonth = 4;
+                  nowMonth = 04;
                   break;
                 case 'May':
-                  nowMonth = 5;
+                  nowMonth = 05;
                   break;
                 case 'Jun':
-                  nowMonth = 6;
+                  nowMonth = 06;
                   break;
                 case 'Jul':
-                  nowMonth = 7;
+                  nowMonth = 07;
                   break;
                 case 'Aug':
-                  nowMonth = 8;
+                  nowMonth = 08;
                   break;
                 case 'Sep':
-                  nowMonth = 9;
+                  nowMonth = 09;
                   break;
                 case 'Oct':
                   nowMonth = 10;
