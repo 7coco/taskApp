@@ -8,13 +8,13 @@
   </li>
   <% end %>
 </ul>
-<ul id="tasks">
-  <li v-for="task in tasks">
-    {{ task }}
+<!--ul id="tasks">
+  <li v-for="project in projects">
+    {{ project.tasks }}
   </li>
-</ul>
+</ul-->
 <p><%= link_to "Add New", new_project_path %></p>
-<script>
+<!--script>
 $(function(){
   window.fetch('/project_data')
   .then(function(response){
@@ -24,7 +24,7 @@ $(function(){
       new Vue({
         el: '#tasks',
         data: {
-          tasks: data
+          projects: data
         }
       });
     }).catch(function(err){
@@ -32,4 +32,4 @@ $(function(){
     });
   });
 });
-</script>
+</script-->

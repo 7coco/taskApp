@@ -1,5 +1,5 @@
 <h1><%= @project.title %></h1>
-<ul>
+<!--ul>
   <% @project.tasks.each do |task| %>
     <li>
       <%= check_box_tag '', '', task.done, { 'data-id' => task.id, 'data-project-id' => task.project_id, class: 'done_check' }%>
@@ -23,8 +23,8 @@
       <%= f.submit %>
     <% end %>
   </div>
-</ul>
-<ul id="tasks" style="padding:50px">
+</ul-->
+<ul id="tasks" style="padding-left:50px; padding-right:50px">
   <div class="row">
     <select id="sort" v-on:change="sort" class="col-md-2 col-md-offset-10" style="margin-bottom:5px">
       <option value="updated_before">更新古い順</option>
