@@ -15,5 +15,7 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap-sprockets
+//= require moment
+//= require fullcalendar
 
 window.Vue = require('vue/dist/vue.js');

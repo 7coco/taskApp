@@ -1,0 +1,34 @@
+<h1>Calendar#index</h1>
+<p>Find me in app/views/calendar/index.html.erb</p>
+<div id="calendar"></div>
+<script>
+$(document).ready(function() {
+  // page is now ready, initialize the calendar...
+  window.fetch('/event_data')
+  .then(function(response){
+    response.json()
+    .then(function(data){
+      console.dir(data);
+      $('#calendar').fullCalendar({
+        // put your options and callbacks here
+        fixedWeekCount: false,
+        timezone: 'local',
+        header: {
+          left: 'today',
+          center: 'title',
+          right: 'prev,next month,agendaWeek,agendaDay listMonth',
+        },
+        events: data,
+        eventLimit: true,
+        slotEventOverlap: false,
+        aspectRatio: 1.5,
+        eventClick: function(calEvent, jsEvent, view){
+          console.dir(calEvent);
+          console.dir(jsEvent);
+          console.dir(view);
+        }
+      });
+    })
+  })
+});
+</script>
