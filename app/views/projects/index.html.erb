@@ -21,7 +21,6 @@ $(document).ready(function() {
   .then(function(response){
     response.json()
     .then(function(data){
-      console.dir(data);
       $('#calendar').fullCalendar({
         // put your options and callbacks here
         fixedWeekCount: false,

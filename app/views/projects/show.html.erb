@@ -134,8 +134,10 @@ $(function(){
       break;
   }
   var nowDay = parseInt(now[2], 10);
+  nowDay = ("0" + nowDay).slice(-2);
   var nowHour = now[4].slice(0, 2);
   var nowMinute = now[4].slice(3, 5);
+  nowMinute = ("0" + nowMinute).slice(-2);
   var currentTime = nowYear + '-' + nowMonth + '-' + nowDay + 'T' + nowHour + ':' + nowMinute;
   console.log(currentTime);
   window.fetch('/task_data/' + project_id)
