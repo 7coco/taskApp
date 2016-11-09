@@ -1,5 +1,5 @@
-<h1>Projects</h1>
-<ul>
+<ul class="col-md-4">
+  <h1>Projects</h1>
   <% @projects.each do |project| %>
   <li>
     <%= link_to project.title, project_path(project.id) %>(<%= project.tasks.unfinished.count %>/<%= project.tasks.count %>)
@@ -7,13 +7,50 @@
     <%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "Are you sure?" } %>
   </li>
   <% end %>
+  <p><%= link_to "Add New", new_project_path %></p>
 </ul>
+<div class="col-md-8">
+  <h1>Calendar#index</h1>
+  <p>Find me in app/views/calendar/index.html.erb</p>
+  <div id="calendar"></div>
+</div>
+<script>
+$(document).ready(function() {
+  // page is now ready, initialize the calendar...
+  window.fetch('/event_data')
+  .then(function(response){
+    response.json()
+    .then(function(data){
+      console.dir(data);
+      $('#calendar').fullCalendar({
+        // put your options and callbacks here
+        fixedWeekCount: false,
+        timezone: 'local',
+        header: {
+          left: 'today',
+          center: 'title',
+          right: 'prev,next month,agendaWeek,agendaDay listMonth',
+        },
+        events: data,
+        eventLimit: true,
+        slotEventOverlap: false,
+        aspectRatio: 1.5,
+        eventClick: function(calEvent, jsEvent, view){
+          console.dir(calEvent);
+          console.dir(jsEvent);
+          console.dir(view);
+        }
+      });
+    })
+  })
+});
+</script>
+
 <!--ul id="tasks">
   <li v-for="project in projects">
     {{ project.tasks }}
   </li>
 </ul-->
-<p><%= link_to "Add New", new_project_path %></p>
 <!--script>
 $(function(){
   window.fetch('/project_data')
