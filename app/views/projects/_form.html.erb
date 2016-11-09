@@ -2,6 +2,8 @@
   <p>
     <%= f.label :title %><br>
     <%= f.text_field :title %>
+    <%= f.label :color %>
+    <%= f.select :color, { red: "red", blue: "blue", green: "green", purple: "purple", brown: "brown", pink: "pink", orange: "orange" }%>
     <% if @project.errors.any? %>
       <%= @project.errors.messages[:title][0] %>
     <% end%>
