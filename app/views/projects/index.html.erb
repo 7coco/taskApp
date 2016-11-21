@@ -1,19 +1,84 @@
-<ul class="col-md-4">
-  <h1>Projects</h1>
-  <% @projects.each do |project| %>
-  <li>
-    <%= link_to project.title, project_path(project.id) %>(<%= project.tasks.unfinished.count %>/<%= project.tasks.count %>)
-    <%= link_to "[Edit]", edit_project_path(project.id) %>
-    <%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "Are you sure?" } %>
-  </li>
-  <% end %>
-  <p><%= link_to "Add New", new_project_path %></p>
-</ul>
-<div class="col-md-8">
-  <h1>Calendar#index</h1>
-  <p>Find me in app/views/calendar/index.html.erb</p>
-  <div id="calendar"></div>
-</div>
+<body id="homeBody">
+  <ul class="col-md-4">
+    <!-- 左側に表示するプロジェクト一覧 -->
+    <h1>Projects</h1>
+    <% @projects.each do |project| %>
+    <li>
+      <%= link_to project.title, project_path(project.id) %>(<%= project.tasks.unfinished.count %>/<%= project.tasks.count %>)
+      <%= link_to "[Edit]", edit_project_path(project.id) %>
+      <%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "Are you sure?" } %>
+    </li>
+    <% end %>
+    <!--p><%= link_to "Add New", new_project_path %></p-->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createProjectModal" id="newProjectModalTrigger" @click="newProject">Add New Project</button>
+  </ul>
+
+  <!-- プロジェクト作成のモーダル-->
+  <div id="createProjectModal" class="modal fade" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-dialog" role="document">
+      <div id="createProject" class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modalTitle"> Create a New Project</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="form-group">
+              <label for="projectTitle">Project Title</label>
+              <input type="text" id="projectTitle" placeholder="ex.) Implement a task management tool by using Ruby on rails and MVVM." class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="button" value="Create Project" @click="submitCreateProject">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右側もしくは下に表示されるカレンダーの表示 -->
+  <div class="col-md-8">
+    <h1>Calendar#index</h1>
+    <p>Find me in app/views/calendar/index.html.erb</p>
+    <div id="calendar"></div>
+  </div>
+
+  <!-- カレンダーの日付部分をクリックした時のモーダル -->
+  <div id="createTaskModal" class="modal fade" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-dialog" role="document">
+      <div id="createTask" class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modalTitle"> Create a New Task</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="form-group">
+              <label for="projectTitle">Project Title</label>
+              <select id="projectTitles">
+                <option v-for="project in projects" :value="project.id">
+                  {{ project.title }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="taskTitle">Task Title</label>
+              <input type="text" id="taskTitle" placeholder="ex.) Implement a task management tool by using Ruby on rails and MVVM." class="form-control">
+            </div>
+            <div class="form-group" id="dueDate">
+              <label for="deadline">Due Date</label>
+              <input type="datetime-local" id="deadline" step="300" :value="clickedTime[0]" class="form-control">
+            </div>
+            <!-- input type="checkbox" id="no_deadline">
+            <label for="no_deadline">締め切りを設定しない</label -->
+          </div>
+        </div>
+        <div class="modal-footer" id="submitCreateTask">
+          <input type="button" value="Create Task" @click="submitCreateTask">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
 <script>
 $(document).ready(function() {
   // page is now ready, initialize the calendar...
@@ -38,10 +103,55 @@ $(document).ready(function() {
           console.dir(calEvent);
           console.dir(jsEvent);
           console.dir(view);
+          // $('#createTaskModal').modal();
+        },
+        dayClick: function(date){
+          $('#createTaskModal').modal();
+          var clickedTime = date._d;
+          console.log(clickedTime);
+          clickedTime = toDatetimeLocal(clickedTime);
+          console.log(clickedTime);
+          new Vue({
+            el: '#dueDate',
+            data: {
+              clickedTime: clickedTime,
+            },
+          });
         }
       });
-    })
-  })
+    });
+  });
+
+  window.fetch('/project_data')
+  .then(function(response){
+    response.json()
+    .then(function(data){
+      new Vue({
+        el: '#projectTitles',
+        data: {
+          projects: data,
+        }
+      });
+      new Vue({
+        el: '#createProjectModal',
+        methods: {
+          submitCreateProject: function(event){
+            $.get('/projects/new');
+          }
+        }
+      });
+      new Vue({
+        el: '#newProjectModalTrigger',
+        methods: {
+          newProject: function(event){
+            $.get('/projects/new', function(data) {
+              console.log(data);
+            });
+          }
+        }
+      });
+    });
+  });
 });
 </script>
 

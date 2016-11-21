@@ -91,54 +91,9 @@ $(function(){
      $.post('/projects/' + $(this).data('project-id') + '/tasks/' + $(this).data('id') + '/toggle');
   });
   var project_id = window.location.pathname.split('/')[2];
-  var now = Date().split(' ');
+  var now = Date();
   console.dir(now);
-  var nowYear = parseInt(now[3], 10);
-  var nowMonth = now[1]
-  switch(nowMonth){
-    case 'Jun':
-      nowMonth = 01;
-      break;
-    case 'Feb':
-      nowMonth = 02;
-      break;
-    case 'Mar':
-      nowMonth = 03;
-      break;
-    case 'Apl':
-      nowMonth = 04;
-      break;
-    case 'May':
-      nowMonth = 05;
-      break;
-    case 'Jun':
-      nowMonth = 06;
-      break;
-    case 'Jul':
-      nowMonth = 07;
-      break;
-    case 'Aug':
-      nowMonth = 08;
-      break;
-    case 'Sep':
-      nowMonth = 09;
-      break;
-    case 'Oct':
-      nowMonth = 10;
-      break;
-    case 'Nov':
-      nowMonth = 11;
-      break;
-    case 'Dec':
-      nowMonth = 12;
-      break;
-  }
-  var nowDay = parseInt(now[2], 10);
-  nowDay = ("0" + nowDay).slice(-2);
-  var nowHour = now[4].slice(0, 2);
-  var nowMinute = now[4].slice(3, 5);
-  nowMinute = ("0" + nowMinute).slice(-2);
-  var currentTime = nowYear + '-' + nowMonth + '-' + nowDay + 'T' + nowHour + ':' + nowMinute;
+  var currentTime = toDatetimeLocal(now);
   console.log(currentTime);
   window.fetch('/task_data/' + project_id)
   .then(function(response){

@@ -9,7 +9,6 @@ class CalendarController < ApplicationController
     @tasks.each do |task|
       next if task.deadline == nil
       @project = Project.find(task.project_id)
-      p @project
       @events.push({
         title: task.title,
         start: task.deadline,

@@ -17,5 +17,6 @@
 //= require bootstrap-sprockets
 //= require moment
 //= require fullcalendar
+//= require ./fmtChange.js
 
 window.Vue = require('vue/dist/vue.js');
